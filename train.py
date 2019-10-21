@@ -1,16 +1,17 @@
 from sklearn.model_selection import train_test_split
 # from keras import backend as K
 from tensorflow.keras.datasets import mnist
+from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
-from tensorflow.keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint
+from tensorflow.keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 import json
 import os
 
-from model import model, learning_rate_reduction
+from model import model  # , learning_rate_reduction
 
 RANDOM_SEED = 3
-EPOCHS = 10  # Turn epochs to 30 to get 0.9967 accuracy
+EPOCHS = 5  # Turn epochs to 30 to get 0.9967 accuracy
 BATCH_SIZE = 32
 MODEL_PATH = 'ToReport'
 NAME = "digits-cnn"
@@ -18,14 +19,18 @@ NAME = "digits-cnn"
 checkpoints = []
 if not os.path.exists('ToReport/Checkpoints/'):
     os.makedirs('ToReport/Checkpoints/')
-    checkpoints.append(ModelCheckpoint('ToReport/Checkpoints/best_weights.h5', monitor='val_loss',
-                                       verbose=0, save_best_only=True,
-                                       save_weights_only=True, mode='auto',
-                                       period=1))
-    checkpoints.append(TensorBoard(log_dir='ToReport/Checkpoints/./logs', histogram_freq=1,
-                                   write_graph=True, write_images=False, embeddings_freq=1,
-                                   embeddings_layer_names=None, embeddings_metadata=None))
-    checkpoints.append(learning_rate_reduction)
+
+checkpoints.append(ModelCheckpoint('ToReport/Checkpoints/best_weights_augment_10.h5', monitor='val_loss',
+                                   verbose=0, save_best_only=True,
+                                   save_weights_only=True, mode='auto'))
+checkpoints.append(TensorBoard(log_dir='ToReport/Checkpoints/./logs', histogram_freq=1,
+                               write_graph=True, write_images=False, embeddings_freq=1,
+                               embeddings_layer_names=None, embeddings_metadata=None))
+checkpoints.append(ReduceLROnPlateau(monitor='val_loss',
+                                     patience=3,
+                                     verbose=1,
+                                     factor=0.3,
+                                     min_lr=0.00001))
 
 # Load dataset
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
@@ -61,18 +66,11 @@ datagen = ImageDataGenerator(
     vertical_flip=False)  # randomly flip images
 
 # data augmentation:
+datagen.fit(X_train)
+history = model.fit_generator(datagen.flow(X_train, Y_train, batch_size=BATCH_SIZE),
+                              epochs=EPOCHS, validation_data=(X_val, Y_val),
+                              verbose=2, steps_per_epoch=X_train.shape[0] // BATCH_SIZE,
+                              callbacks=checkpoints)
 
-# datagen.fit(X_train)
-# history = model.fit_generator(datagen.flow(X_train, Y_train, batch_size=BATCH_SIZE),
-#                              epochs=EPOCHS, validation_data=(X_val, Y_val),
-#                              verbose=2, steps_per_epoch=X_train.shape[0] // BATCH_SIZE,
-#                              callbacks=checkpoints)
-
-# without data augmentation:
-
-history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE,
-                    epochs=EPOCHS, validation_data=(X_val, Y_val),
-                    verbose=2, callbacks=checkpoints)
-
-with open('ToReport/history.txt', 'w') as outfile:
+with open('ToReport/history_augment.txt', 'w') as outfile:
     json.dump(history, outfile)

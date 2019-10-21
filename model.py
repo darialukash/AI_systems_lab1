@@ -1,9 +1,8 @@
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Lambda, Flatten
-from keras.optimizers import Adam, RMSprop
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
+from tensorflow.keras.optimizers import Adam, RMSprop
 from keras import backend as K
 from keras.callbacks import ReduceLROnPlateau
-
 
 model = Sequential()
 
@@ -30,8 +29,8 @@ optimizer = RMSprop(lr=0.003, rho=0.9, epsilon=1e-08, decay=0.0)
 
 model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
 
-learning_rate_reduction = ReduceLROnPlateau(monitor='val_loss',
-                                            patience=3,
-                                            verbose=1,
-                                            factor=0.3,
-                                            min_lr=0.00001)
+# learning_rate_reduction = ReduceLROnPlateau(monitor='val_loss',
+#                                            patience=3,
+#                                            verbose=1,
+#                                            factor=0.3,
+#                                            min_lr=0.00001)
