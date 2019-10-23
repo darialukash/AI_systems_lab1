@@ -11,8 +11,8 @@ import os
 from model import model  # , learning_rate_reduction
 
 RANDOM_SEED = 3
-EPOCHS = 5  # Turn epochs to 30 to get 0.9967 accuracy
-BATCH_SIZE = 32
+EPOCHS = 30  # Turn epochs to 30 to get 0.9967 accuracy
+BATCH_SIZE = 64
 MODEL_PATH = 'ToReport'
 NAME = "digits-cnn"
 
@@ -20,7 +20,7 @@ checkpoints = []
 if not os.path.exists('ToReport/Checkpoints/'):
     os.makedirs('ToReport/Checkpoints/')
 
-checkpoints.append(ModelCheckpoint('ToReport/Checkpoints/best_weights_augment_10.h5', monitor='val_loss',
+checkpoints.append(ModelCheckpoint(f'ToReport/Checkpoints/{NAME}_best_weights.h5', monitor='val_loss',
                                    verbose=0, save_best_only=True,
                                    save_weights_only=True, mode='auto'))
 checkpoints.append(TensorBoard(log_dir='ToReport/Checkpoints/./logs', histogram_freq=1,
@@ -69,8 +69,8 @@ datagen = ImageDataGenerator(
 datagen.fit(X_train)
 history = model.fit_generator(datagen.flow(X_train, Y_train, batch_size=BATCH_SIZE),
                               epochs=EPOCHS, validation_data=(X_val, Y_val),
-                              verbose=2, steps_per_epoch=X_train.shape[0] // BATCH_SIZE,
+                              verbose=1, steps_per_epoch=X_train.shape[0] // BATCH_SIZE,
                               callbacks=checkpoints)
 
-with open('ToReport/history_augment.txt', 'w') as outfile:
-    json.dump(history, outfile)
+with open('ToReport/history.json', 'w') as outfile:
+    json.dump(history.history, outfile)
