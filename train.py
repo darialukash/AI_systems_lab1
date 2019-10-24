@@ -33,18 +33,17 @@ checkpoints.append(ReduceLROnPlateau(monitor='val_loss',
                                      min_lr=0.00001))
 
 # Load dataset
-(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+(train_images, train_labels), _ = mnist.load_data()
 
 # print(train_images.shape)
 # print(train_labels.shape)
 
 train_images = train_images.reshape(*train_images.shape, 1)
-test_images = test_images.reshape(*test_images.shape, 1)
+
 
 # print(train_images.shape)
 # Normalize the data
 train_images = train_images / 255.0
-test_images = test_images / 255.0
 
 train_labels = to_categorical(train_labels, num_classes=10)
 

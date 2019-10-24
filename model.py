@@ -28,9 +28,3 @@ model.add(Dense(10, activation="softmax"))
 optimizer = RMSprop(lr=0.003, rho=0.9, epsilon=1e-08, decay=0.0)
 
 model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
-
-# learning_rate_reduction = ReduceLROnPlateau(monitor='val_loss',
-#                                            patience=3,
-#                                            verbose=1,
-#                                            factor=0.3,
-#                                            min_lr=0.00001)
