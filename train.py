@@ -1,7 +1,5 @@
 from sklearn.model_selection import train_test_split
-# from keras import backend as K
 from tensorflow.keras.datasets import mnist
-from tensorflow import keras
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
 from tensorflow.keras.callbacks import TensorBoard, EarlyStopping, ModelCheckpoint, ReduceLROnPlateau

@@ -1,8 +1,6 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Dropout, Flatten
-from tensorflow.keras.optimizers import Adam, RMSprop
-from keras import backend as K
-from keras.callbacks import ReduceLROnPlateau
+from tensorflow.keras.optimizers import RMSprop
 
 model = Sequential()
 
