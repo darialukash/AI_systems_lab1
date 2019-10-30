@@ -1,8 +1,5 @@
 from tensorflow.keras.datasets import mnist
-from keras.utils.np_utils import to_categorical
 from model import model
-from sklearn.metrics import confusion_matrix
-import itertools
 from skimage import io
 import matplotlib.pyplot as plt
 import numpy as np
