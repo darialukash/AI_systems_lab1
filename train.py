@@ -68,6 +68,3 @@ history = model.fit_generator(datagen.flow(X_train, Y_train, batch_size=BATCH_SI
                               epochs=EPOCHS, validation_data=(X_val, Y_val),
                               verbose=1, steps_per_epoch=X_train.shape[0] // BATCH_SIZE,
                               callbacks=checkpoints)
-
-with open('ToReport/history.json', 'w') as outfile:
-    json.dump(history.history, outfile)
