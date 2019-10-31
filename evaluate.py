@@ -65,6 +65,8 @@ test_labels = to_categorical(test_labels, num_classes=10)
 # Обученная модель:
 model.load_weights(SAVED_MODEL)
 
+model.evaluate(test_images, test_labels)
+
 ## Матрица ошибок:
 Y_pred = model.predict(test_images)
 Y_pred_classes = np.argmax(Y_pred, axis=1)
