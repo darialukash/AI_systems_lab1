@@ -18,5 +18,5 @@ model.load_weights(SAVED_MODEL)
 
 pred = model.predict(test_img)
 io.imshow(test_images[k])
-plt.title(f'True label: {test_labels[k]}, Predicted: {np.argmax(pred)}')
+plt.title(f'Истинное значение: {test_labels[k]}, Предсказание модели: {np.argmax(pred)}')
 plt.show()
